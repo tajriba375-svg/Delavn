@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SwiftDrop - العميل</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="splash" class="splash">SwiftDrop</div>
+
+    <div id="app" class="app hidden">
+      <header class="top-bar">
+        <div class="top-actions">
+          <button id="notifBtn" class="notif-btn" aria-label="الإشعارات">🔔<span id="notifCount" class="notif-count hidden">0</span></button>
+          <button id="supportBtn" class="support-btn" aria-label="الدعم">
+            <span>الدعم</span><span class="wa-badge">WA</span>
+          </button>
+        </div>
+        <div id="gpsBanner" class="banner hidden"></div>
+      </header>
+
+      <main>
+        <section id="homeView" class="view active">
+          <div id="map"></div>
+
+          <div id="categoryBar" class="category-bar">
+            <button class="cat-btn" data-category="special">
+              <span class="icon">🚚</span>
+              <small>توصيل</small>
+            </button>
+            <button class="cat-btn active" data-category="all">
+              <span class="icon">▦</span>
+              <small>الكل</small>
+            </button>
+            <button class="cat-btn" data-category="shops">
+              <span class="icon">🏪</span>
+              <small>محلات</small>
+            </button>
+            <button class="cat-btn" data-category="restaurants">
+              <span class="icon">🍔</span>
+              <small>مطاعم</small>
+            </button>
+          </div>
+
+          <button id="locateBtn" class="locate-btn" aria-label="تحديد موقعي">⌖</button>
+
+          <div id="trackingWidget" class="tracking-widget hidden"></div>
+
+          <section class="nearby-wrap">
+            <div class="nearby-head">
+              <h3>قريب منك</h3>
+            </div>
+            <div id="nearbyList" class="nearby-list"></div>
+          </section>
+
+          <section id="exploreDrawer" class="explore-drawer collapsed">
+            <div id="drawerHandle" class="drawer-handle"></div>
+            <div class="drawer-content">
+              <div id="drawerCats" class="drawer-cats"></div>
+              <div id="drawerItems" class="drawer-items"></div>
+            </div>
+          </section>
+        </section>
+
+        <section id="ordersView" class="view">
+          <div class="panel">
+            <h2>طلباتي</h2>
+            <div id="ordersList"></div>
+          </div>
+        </section>
+
+        <section id="profileView" class="view">
+          <div class="panel">
+            <h2>الملف الشخصي</h2>
+            <form id="profileForm" class="form"></form>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-view="homeView">🏠 <span>الرئيسية</span></button>
+        <button class="nav-btn" data-view="ordersView">📦 <span>الطلبات</span></button>
+        <button class="nav-btn" data-view="profileView">👤 <span>الملف</span></button>
+      </nav>
+
+      <div id="placeSheet" class="sheet hidden"></div>
+      <div id="wizardSheet" class="sheet hidden"></div>
+      <div id="toast" class="toast hidden"></div>
+      <aside id="notifPanel" class="notif-panel hidden">
+        <div class="notif-head"><strong>الإشعارات</strong><button id="clearNotif" class="mini-btn">مسح</button></div>
+        <div id="notifList" class="notif-list"></div>
+      </aside>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
