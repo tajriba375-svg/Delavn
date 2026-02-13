@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SwiftDrop - العميل</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="splash" class="splash">SwiftDrop</div>
+
+    <div id="app" class="app hidden">
+      <header class="top-bar">
+        <div class="top-actions">
+          <button id="notifBtn" class="notif-btn" aria-label="الإشعارات">🔔<span id="notifCount" class="notif-count hidden">0</span></button>
+          <button id="supportBtn" class="support-btn" aria-label="الدعم">
+            <span>الدعم</span><span class="wa-badge">WA</span>
+          </button>
+        </div>
+        <div id="gpsBanner" class="banner hidden"></div>
+      </header>
+
+      <main>
+        <section id="homeView" class="view active">
+          <div id="map"></div>
+
+          <div id="categoryBar" class="category-bar">
+            <button class="cat-btn" data-category="restaurants">
+              <span class="icon icon-photo" aria-hidden="true">
+                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f354.svg" alt="بركر" />
+              </span>
+              <small>مطاعم</small>
+            </button>
+            <button class="cat-btn" data-category="shops">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/><path d="M3 5h2l2 9.5a1.5 1.5 0 0 0 1.46 1.2h8.9a1.5 1.5 0 0 0 1.45-1.1L21 8H6.4"/></svg>
+              </span>
+              <small>محلات</small>
+            </button>
+            <button class="cat-btn active" data-category="all">
+              <span class="icon icon-all" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="18" r="1.6"/><circle cx="14" cy="18" r="1.6"/><path d="M2.5 6h2l1.8 7.7a1.3 1.3 0 0 0 1.28 1.02h7.7"/><path d="M14 9.2h7.2"/><path d="M15 9.2a3.6 3.6 0 0 1 7.2 0"/><path d="M15 12h7.2"/></svg>
+              </span>
+              <small>الكل</small>
+            </button>
+            <button class="cat-btn" data-category="special">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="9.5" width="8" height="5.5" rx="1"/><path d="M10.5 12.2h2.6l1.4-3h3.6a2 2 0 0 1 2 2v3.8h-2.2"/><rect x="14.2" y="6.9" width="3.5" height="2.3" rx=".4"/><circle cx="7" cy="17.7" r="1.8"/><circle cx="17" cy="17.7" r="1.8"/></svg>
+              </span>
+              <small>توصيل طرد</small>
+            </button>
+          </div>
+
+          <div class="map-search-wrap">
+            <input id="mapSearchInput" class="map-search-input" type="search" placeholder="بحث عن مطعم أو محل..." />
+          </div>
+
+          <button id="locateBtn" class="locate-btn" aria-label="تحديد موقعي">⌖</button>
+
+          <div id="trackingWidget" class="tracking-widget hidden"></div>
+
+          <section id="exploreDrawer" class="explore-drawer collapsed">
+            <div id="drawerHandle" class="drawer-handle"></div>
+            <div class="drawer-top">
+              <strong>قريب منك</strong>
+              <button id="drawerCloseBtn" class="drawer-close" aria-label="إغلاق">✕</button>
+            </div>
+            <div class="drawer-content">
+              <div id="nearbyList" class="nearby-list"></div>
+              <div id="drawerCats" class="drawer-cats"></div>
+              <div id="drawerItems" class="drawer-items"></div>
+            </div>
+          </section>
+        </section>
+
+        <section id="ordersView" class="view">
+          <div class="panel">
+            <h2>طلباتي</h2>
+            <div id="ordersList"></div>
+          </div>
+        </section>
+
+        <section id="profileView" class="view">
+          <div class="panel">
+            <h2>الملف الشخصي</h2>
+            <form id="profileForm" class="form"></form>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-view="homeView" aria-label="الرئيسية">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5 12 3l9 7.5"/><path d="M6.75 9.75V21h10.5V9.75"/></svg>
+          </span>
+          <span>الرئيسية</span>
+        </button>
+        <button class="nav-btn" data-view="ordersView" aria-label="القفة">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 10h14l-1.2 8a2 2 0 0 1-2 1.7H8.2a2 2 0 0 1-2-1.7L5 10Z"/><path d="M9 10V8a3 3 0 0 1 6 0v2"/></svg>
+          </span>
+          <span>القفة</span>
+        </button>
+        <button class="nav-btn" data-view="ordersView" aria-label="الطلبات">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7.5 7.5h9l-.8 9a2 2 0 0 1-2 1.8h-3.4a2 2 0 0 1-2-1.8l-.8-9Z"/><path d="M9.5 7.5V6a2.5 2.5 0 1 1 5 0v1.5"/></svg>
+          </span>
+          <span>الطلبات</span>
+        </button>
+        <button class="nav-btn" data-view="profileView" aria-label="البروفايل">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+          </span>
+          <span>البروفايل</span>
+        </button>
+      </nav>
+
+      <div id="placeSheet" class="sheet hidden"></div>
+      <div id="wizardSheet" class="sheet hidden"></div>
+      <div id="toast" class="toast hidden"></div>
+      <aside id="notifPanel" class="notif-panel hidden">
+        <div class="notif-head"><strong>الإشعارات</strong><button id="clearNotif" class="mini-btn">مسح</button></div>
+        <div id="notifList" class="notif-list"></div>
+      </aside>
+    </div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
