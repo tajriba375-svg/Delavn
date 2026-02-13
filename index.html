@@ -49,20 +49,22 @@
             </button>
           </div>
 
+          <div class="map-search-wrap">
+            <input id="mapSearchInput" class="map-search-input" type="search" placeholder="بحث عن مطعم أو محل..." />
+          </div>
+
           <button id="locateBtn" class="locate-btn" aria-label="تحديد موقعي">⌖</button>
 
           <div id="trackingWidget" class="tracking-widget hidden"></div>
 
-          <section class="nearby-wrap">
-            <div class="nearby-head">
-              <h3>قريب منك</h3>
-            </div>
-            <div id="nearbyList" class="nearby-list"></div>
-          </section>
-
           <section id="exploreDrawer" class="explore-drawer collapsed">
             <div id="drawerHandle" class="drawer-handle"></div>
+            <div class="drawer-top">
+              <strong>قريب منك</strong>
+              <button id="drawerCloseBtn" class="drawer-close" aria-label="إغلاق">✕</button>
+            </div>
             <div class="drawer-content">
+              <div id="nearbyList" class="nearby-list"></div>
               <div id="drawerCats" class="drawer-cats"></div>
               <div id="drawerItems" class="drawer-items"></div>
             </div>

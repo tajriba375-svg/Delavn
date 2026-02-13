@@ -87,6 +87,7 @@ let currentView = "homeView";
 let placeCart = {};
 let wizard = { step: 1, pickup: null, dropoff: null, kind: "", name: "", details: "", weight: 1, addressType: "villa", addressData: {} };
 let drawerCategory = "restaurant";
+let mapSearchTerm = "";
 
 const el = {
   app: document.getElementById("app"),
@@ -103,6 +104,8 @@ const el = {
   drawerHandle: document.getElementById("drawerHandle"),
   drawerCats: document.getElementById("drawerCats"),
   drawerItems: document.getElementById("drawerItems"),
+  mapSearchInput: document.getElementById("mapSearchInput"),
+  drawerCloseBtn: document.getElementById("drawerCloseBtn"),
   notifPanel: document.getElementById("notifPanel"),
   notifList: document.getElementById("notifList"),
 };
@@ -138,9 +141,9 @@ function setupSplashFallback() {
 
 function initMap() {
   map = L.map("map", { zoomControl: false }).setView([33.9716, -6.8498], 12);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 20,
-    attribution: "© OpenStreetMap / CARTO",
+    attribution: "© OpenStreetMap contributors",
   }).addTo(map);
 
   map.on("movestart", () => el.categoryBar.classList.add("hidden-fade"));
@@ -179,6 +182,18 @@ function bindUi() {
   document.getElementById("locateBtn").addEventListener("click", () => {
     if (userLatLng) map.setView(userLatLng, 14);
     else requestLocation();
+  });
+
+
+  el.mapSearchInput?.addEventListener("input", (e) => {
+    mapSearchTerm = String(e.target.value || "").trim().toLowerCase();
+    renderPois();
+    renderNearby();
+    renderDrawer();
+  });
+
+  el.drawerCloseBtn?.addEventListener("click", () => {
+    el.exploreDrawer?.classList.remove("expanded");
   });
 
   document.querySelectorAll(".cat-btn").forEach((btn) => {
@@ -230,9 +245,11 @@ function setUserMarker() {
 }
 
 function filteredPois() {
-  if (selectedCategory === "restaurants") return POIS.filter((p) => p.type === "restaurant");
-  if (selectedCategory === "shops") return POIS.filter((p) => p.type === "shop");
-  return POIS;
+  let list = POIS;
+  if (selectedCategory === "restaurants") list = list.filter((p) => p.type === "restaurant");
+  if (selectedCategory === "shops") list = list.filter((p) => p.type === "shop");
+  if (mapSearchTerm) list = list.filter((p) => p.name.toLowerCase().includes(mapSearchTerm));
+  return list;
 }
 
 function markerHtml(p) {
@@ -254,6 +271,10 @@ function renderNearby() {
   const items = filteredPois().map((p) => ({ ...p, distance: userLatLng ? km(userLatLng, [p.lat, p.lng]) : null }));
   items.sort((a, b) => (a.distance ?? 999) - (b.distance ?? 999));
   const active = state.orders.find((o) => ["processing", "at_shop", "courier", "review"].includes(o.status));
+  if (!items.length) {
+    el.nearbyList.innerHTML = `<article class="near-card" style="min-width:100%"><div><h4>لا توجد نتائج</h4><p>جرّب اسم مطعم أو محل آخر.</p></div></article>`;
+    return;
+  }
   el.nearbyList.innerHTML = items
     .map((p) => {
       const closedClass = p.open ? "" : "closed-item";
@@ -298,7 +319,7 @@ function renderDrawer() {
     .map((c) => `<button class="drawer-cat ${drawerCategory === c.id ? "active" : ""}" data-cat="${c.id}">${c.label}</button>`)
     .join("");
 
-  const base = POIS.filter((p) => p.type === drawerCategory).map((p) => ({ name: p.name, image: p.image, placeId: p.id }));
+  const base = filteredPois().filter((p) => p.type === drawerCategory).map((p) => ({ name: p.name, image: p.image, placeId: p.id }));
   const extra = {
     electronics: [
       { name: "Electro Store", image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=700" },
@@ -347,8 +368,8 @@ function bindDrawerGesture() {
   const end = (y) => {
     if (startY == null) return;
     const diff = y - startY;
-    if (diff < -30) drawer.classList.add("expanded");
-    if (diff > 35) drawer.classList.remove("expanded");
+    if (diff < -22) drawer.classList.add("expanded");
+    if (diff > 28) drawer.classList.remove("expanded");
     startY = null;
   };
   el.drawerHandle?.addEventListener("touchstart", (e) => start(e.touches[0].clientY), { passive: true });
