@@ -140,9 +140,9 @@ function setupSplashFallback() {
 }
 
 function initMap() {
-  map = L.map("map", { zoomControl: false, minZoom: 10, maxZoom: 16 }).setView([33.9716, -6.8498], 11);
+  map = L.map("map", { zoomControl: false, minZoom: 10, maxZoom: 14 }).setView([33.9716, -6.8498], 11);
   L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-    maxZoom: 16,
+    maxZoom: 14,
     attribution: "© OpenStreetMap / CARTO",
   }).addTo(map);
 
