@@ -194,7 +194,7 @@ function bindUi() {
 }
 
 function requestLocation() {
-  if (!navigator.geolocation) return showBanner("Veuillez activer la localisation (GPS) pour afficher les lieux proches.");
+  if (!navigator.geolocation) return showBanner("فعّل تحديد الموقع (GPS) باش يبانوا ليك الأماكن القريبة.");
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       userLatLng = [pos.coords.latitude, pos.coords.longitude];
@@ -205,7 +205,7 @@ function requestLocation() {
       else hideBanner();
       renderNearby();
     },
-    () => showBanner("Veuillez activer la localisation (GPS) pour afficher les lieux proches."),
+    () => showBanner("فعّل تحديد الموقع (GPS) باش يبانوا ليك الأماكن القريبة."),
     { enableHighAccuracy: true, timeout: 8000 }
   );
 
