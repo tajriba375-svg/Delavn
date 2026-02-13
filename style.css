@@ -127,31 +127,44 @@ main, .view, #homeView, #map { height: calc(100vh - 74px); }
 .cat-btn {
   border: 1px solid #fff;
   background: linear-gradient(180deg, #ffffff, #fff7f7);
-  width: 74px;
-  height: 82px;
+  width: 82px;
+  height: 100px;
   border-radius: 999px;
   box-shadow: 0 12px 24px #0000001f, 0 0 0 2px #dc262626;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 7px;
   color: #111;
   font-weight: 800;
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .cat-btn:hover { transform: translateY(-2px); }
 .cat-btn .icon {
-  width: 30px;
-  height: 30px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
+  overflow: hidden;
+  display: block;
   background: #fff;
   box-shadow: 0 4px 10px #dc262622;
-  font-size: 1rem;
 }
-.cat-btn small { font-size: .72rem; }
+.cat-btn .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cat-btn .icon.icon-all {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.cat-btn .icon.icon-all img {
+  width: 100%;
+  height: 100%;
+}
+.cat-btn small { font-size: .75rem; }
 .cat-btn.active {
   border-color: #fecaca;
   background: #fff1f2;
