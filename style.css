@@ -96,12 +96,6 @@ main, .view, #homeView, #map { height: calc(100vh - 74px); }
 .view { display: none; }
 .view.active { display: block; }
 #map { width: 100%; }
-#map .leaflet-tile-pane {
-  filter: saturate(1.2) contrast(1.04) hue-rotate(10deg) brightness(1.03);
-}
-#map .leaflet-tile {
-  image-rendering: auto;
-}
 
 .category-bar {
   position: fixed; top: 68px; left: 50%; transform: translateX(-50%);
