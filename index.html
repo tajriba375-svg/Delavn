@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delavn Client</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7GvrPxCzH2+1zCoVxT4p3YV+5xPA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="splash" id="splash">
+    <div class="splash-logo">
+      <span class="splash-name">Delavn</span>
+      <span class="splash-tagline">Votre livraison, en douceur</span>
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="app-header">
+      <div class="location-pill">
+        <i class="fa-solid fa-location-dot"></i>
+        <span id="locationLabel">Témara, Maroc</span>
+      </div>
+      <button class="support-btn" id="supportBtn" type="button">
+        <span class="support-icon">
+          <i class="fa-brands fa-whatsapp"></i>
+        </span>
+        Support
+      </button>
+    </header>
+
+    <main class="views">
+      <section class="view view-home active" id="view-home">
+        <div id="map"></div>
+        <div class="gps-banner" id="gpsBanner">
+          Nous avons perdu votre position, veuillez réactiver le GPS.
+        </div>
+
+        <div class="order-status" id="orderStatus">
+          <div class="status-step">
+            <span class="status-dot"></span>
+            Commande en cours de traitement
+          </div>
+          <div class="status-step">
+            <span class="status-dot"></span>
+            En attente du restaurant
+          </div>
+          <div class="status-step">
+            <span class="status-dot"></span>
+            En route (livreur)
+          </div>
+        </div>
+
+        <button class="locate-btn" id="locateBtn" type="button">
+          <i class="fa-solid fa-location-crosshairs"></i>
+        </button>
+
+        <div class="category-overlay" id="categoryOverlay">
+          <div class="category-wave"></div>
+          <div class="category-grid">
+            <button class="category-card" data-category="restaurants" type="button">
+              <div class="category-illustration" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img" aria-label="Restaurants">
+                  <circle cx="60" cy="60" r="46" fill="#FFEFE0" />
+                  <path
+                    d="M42 42h8v36a6 6 0 0 1-12 0V42h4zm24 0h12v36a6 6 0 1 1-12 0V42zm18 0h6a12 12 0 0 1 12 12v24a10 10 0 0 1-20 0V42z"
+                    fill="#FF7A00"
+                  />
+                  <circle cx="78" cy="36" r="6" fill="#FFB35C" />
+                </svg>
+              </div>
+              <span>Restaurants</span>
+            </button>
+            <button class="category-card" data-category="shops" type="button">
+              <div class="category-illustration" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img" aria-label="Magasins">
+                  <rect x="24" y="34" width="72" height="52" rx="12" fill="#E9F4FF" />
+                  <path d="M28 46h64l-8 18H36l-8-18z" fill="#5AA9FF" />
+                  <rect x="44" y="64" width="32" height="22" rx="6" fill="#FFBE55" />
+                </svg>
+              </div>
+              <span>Magasins</span>
+            </button>
+            <button class="category-card" data-category="delivery" type="button">
+              <div class="category-illustration" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img" aria-label="Livraison">
+                  <circle cx="60" cy="60" r="46" fill="#EAF9F1" />
+                  <path
+                    d="M34 66h26l12-16h16l10 16v12h-6a8 8 0 0 0-16 0H54a8 8 0 0 0-16 0h-4v-12z"
+                    fill="#3AC183"
+                  />
+                  <circle cx="58" cy="78" r="6" fill="#0F7C4A" />
+                  <circle cx="90" cy="78" r="6" fill="#0F7C4A" />
+                </svg>
+              </div>
+              <span>Livraison</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="places-strip" id="placesStrip">
+          <div class="places-track" id="placesTrack"></div>
+        </div>
+      </section>
+
+      <section class="view view-orders" id="view-orders">
+        <div class="view-header">
+          <h2>Commandes</h2>
+          <p>Suivez vos commandes en temps réel.</p>
+        </div>
+        <div class="order-card">
+          <div>
+            <h3>Commande #4582</h3>
+            <p>En route · 30-35 min</p>
+          </div>
+          <button class="ghost-btn" type="button">Voir</button>
+        </div>
+        <div class="order-card">
+          <div>
+            <h3>Commande #4521</h3>
+            <p>Livrée · 2 articles</p>
+          </div>
+          <button class="ghost-btn" type="button">Historique</button>
+        </div>
+      </section>
+
+      <section class="view view-profile" id="view-profile">
+        <div class="view-header">
+          <h2>Profil</h2>
+          <p>Votre compte et préférences.</p>
+        </div>
+        <div class="profile-card">
+          <div class="profile-avatar">AM</div>
+          <div>
+            <h3>Amine Maroc</h3>
+            <p>amine@email.com</p>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="setting-btn" id="openSettings" type="button">
+            <i class="fa-solid fa-gear"></i>
+            Paramètres
+          </button>
+          <button class="setting-btn" type="button">
+            <i class="fa-solid fa-bell"></i>
+            Notifications
+          </button>
+          <button class="setting-btn" type="button">
+            <i class="fa-solid fa-shield"></i>
+            Sécurité
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-view="home" type="button">
+        <i class="fa-solid fa-house"></i>
+        <span>Accueil</span>
+      </button>
+      <button class="nav-item" data-view="orders" type="button">
+        <i class="fa-regular fa-rectangle-list"></i>
+        <span>Commandes</span>
+      </button>
+      <button class="nav-item" data-view="profile" type="button">
+        <i class="fa-regular fa-user"></i>
+        <span>Profil</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="bottom-sheet" id="restaurantSheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" id="closeSheet" type="button">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="sheet-content">
+      <div class="sheet-header">
+        <img id="sheetImage" src="" alt="Logo" />
+        <div class="sheet-title">
+          <h3 id="sheetName">Restaurant</h3>
+          <div class="sheet-actions">
+            <a id="callBtn" href="#" class="icon-btn" aria-label="Appeler">
+              <i class="fa-solid fa-phone"></i>
+            </a>
+            <a id="waBtn" href="#" class="icon-btn" aria-label="WhatsApp">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="menu" id="menuContainer"></div>
+    </div>
+    <div class="cart-banner" id="cartBanner">
+      <div>
+        <strong>Confirmer la commande</strong>
+        <div class="cart-breakdown">
+          <span>Articles: <span id="itemsTotal">0 MAD</span></span>
+          <span>Livraison: <span id="deliveryTotal">0 MAD</span></span>
+          <button class="info-dot" id="deliveryInfo" type="button" aria-label="Info livraison">i</button>
+        </div>
+      </div>
+      <button class="confirm-btn" id="confirmOrder" type="button">
+        Total: <span id="finalTotal">0 MAD</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h3>Confirmation des informations</h3>
+      <p>Merci de vérifier vos informations avant de valider.</p>
+      <form id="orderForm">
+        <label>
+          Nom complet
+          <input type="text" required placeholder="Votre nom" />
+        </label>
+        <label>
+          Téléphone
+          <input type="tel" required placeholder="06 XX XX XX XX" />
+        </label>
+        <label>
+          Adresse de livraison
+          <input type="text" required placeholder="Adresse exacte" />
+        </label>
+        <div class="modal-actions">
+          <button class="ghost-btn" type="button" id="closeOrderModal">Annuler</button>
+          <button class="primary-btn" type="submit">Confirmer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="closedAlert">
+    <div class="modal-content">
+      <h3>Indisponible</h3>
+      <p>Ce magasin est suspendu pour le moment — bientôt ouvert.</p>
+      <div class="modal-actions">
+        <button class="primary-btn" id="closeClosedAlert" type="button">Compris</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="settingsSheet">
+    <div class="modal-content">
+      <h3>Paramètres</h3>
+      <div class="settings-list">
+        <label class="toggle">
+          <span>Mode sombre</span>
+          <input type="checkbox" />
+          <span class="toggle-slider"></span>
+        </label>
+        <label class="toggle">
+          <span>Alertes promotionnelles</span>
+          <input type="checkbox" checked />
+          <span class="toggle-slider"></span>
+        </label>
+        <label class="toggle">
+          <span>Recevoir des SMS</span>
+          <input type="checkbox" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="primary-btn" id="closeSettings" type="button">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="script.js"></script>
+</body>
+</html>
